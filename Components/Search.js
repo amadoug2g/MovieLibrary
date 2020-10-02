@@ -11,6 +11,7 @@ import {
 
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
 import FilmItem from "./FilmItem";
+import { connect } from "react-redux";
 
 class Search extends React.Component {
   constructor(props) {
@@ -77,6 +78,19 @@ class Search extends React.Component {
     );
   }
 
+  _favoriteTitle = (text) => {
+    const result = text;
+    if (
+      this.props.favoritesFilm.findIndex(
+        (item) => item.id === this.state.film.id
+      ) !== -1
+    ) {
+      return false;
+    } else {
+      return result;
+    }
+  };
+
   // Displaying Film details
   _displayDetailForFilm = (idFilm) => {
     this.props.navigation.navigate("FilmDetail", { idFilm: idFilm });
@@ -100,7 +114,15 @@ class Search extends React.Component {
           renderItem={({ item }) => (
             <FilmItem
               film={item}
+              isFilmFavorite={
+                this.props.favoritesFilm.findIndex(
+                  (film) => film.id === item.id
+                ) !== -1
+                  ? true
+                  : false
+              }
               displayDetailForFilm={this._displayDetailForFilm}
+              extraData={this.props.favoritesFilm}
             />
           )}
           onEndReachedThreshold={0.5}
@@ -115,8 +137,6 @@ class Search extends React.Component {
     );
   }
 }
-
-export default Search;
 
 const styles = StyleSheet.create({
   main_container: {
@@ -143,3 +163,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    favoritesFilm: state.favoritesFilm,
+  };
+};
+
+export default connect(mapStateToProps)(Search);

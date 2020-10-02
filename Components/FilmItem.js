@@ -1,10 +1,16 @@
-// Components/FilmItem.js
-
 import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { getImageFromApi } from "../API/TMDBApi";
 
 class FilmItem extends React.Component {
+  _displayFavoriteImage(bool) {
+    // Default image is hollow
+    var sourceImage = require("../Images/ic_favorite.png");
+    if (bool) {
+      return <Image style={styles.favorite_image} source={sourceImage} />;
+    }
+  }
+
   render() {
     const { film, displayDetailForFilm } = this.props;
     return (
@@ -20,8 +26,16 @@ class FilmItem extends React.Component {
         />
         <View style={styles.content_container}>
           <View style={styles.header_container}>
-            <Text style={styles.title_text}>{film.title}</Text>
-            <Text style={styles.vote_text}>{film.vote_average}</Text>
+            <View style={styles.title_image}>
+              <Text style={styles.title_text}>
+                {this._displayFavoriteImage(this.props.isFilmFavorite)}&nbsp;
+                {film.title}
+              </Text>
+            </View>
+
+            <View style={styles.vote_style}>
+              <Text style={styles.vote_text}>{film.vote_average}</Text>
+            </View>
           </View>
           <View style={styles.description_container}>
             <Text style={styles.description_text} numberOfLines={6}>
@@ -55,18 +69,22 @@ const styles = StyleSheet.create({
   header_container: {
     flex: 3,
     flexDirection: "row",
+    justifyContent: "space-between",
   },
   title_text: {
     fontWeight: "bold",
-    fontSize: 20,
-    flex: 1,
+    fontSize: 18,
+    flex: 3,
     flexWrap: "wrap",
     paddingRight: 5,
+    width: 220,
   },
   vote_text: {
+    flex: 1,
     fontWeight: "bold",
     fontSize: 26,
     color: "#666666",
+    flexWrap: "wrap",
   },
   description_container: {
     flex: 7,
@@ -81,6 +99,22 @@ const styles = StyleSheet.create({
   date_text: {
     textAlign: "right",
     fontSize: 14,
+  },
+  favorite_image: {
+    height: 20,
+    width: 20,
+  },
+  title_image: {
+    flex: 3,
+    flexDirection: "column",
+    flexWrap: "wrap",
+  },
+  vote_style: {
+    flex: 1,
+    flexDirection: "column",
+    textAlign: "right",
+    alignItems: "flex-end",
+    alignContent: "flex-end",
   },
 });
 

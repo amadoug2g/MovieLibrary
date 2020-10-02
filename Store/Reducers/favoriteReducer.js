@@ -5,7 +5,7 @@ function toggleFavorite(state = initialState, action) {
   switch (action.type) {
     case "TOGGLE_FAVORITE":
       const favoriteFilmIndex = state.favoritesFilm.findIndex(
-        (item) => item.id === action.id
+        (item) => item.id === action.value.id
       );
       if (favoriteFilmIndex !== -1) {
         nextState = {

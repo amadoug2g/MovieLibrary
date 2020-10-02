@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Text, ActivityIndicator, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { exp } from "react-native-reanimated";
 import { getFilmDetailFromApi, getImageFromApi } from "../API/TMDBApi";
@@ -28,6 +35,28 @@ class FilmDetail extends React.Component {
     }
   }
 
+  _toggleFavorite() {
+    const action = { type: "TOGGLE_FAVORITE", value: this.state.film };
+    this.props.dispatch(action);
+    this._displayFavoriteImage();
+  }
+
+  _displayFavoriteImage() {
+    // Default image is hollow
+    var sourceImage = require("../Images/ic_favorite_border.png");
+    // If the film id is not in the favorite list
+    if (
+      this.props.favoritesFilm.findIndex(
+        (item) => item.id === this.state.film.id
+      ) !== -1
+    ) {
+      // Change the image to update the film status
+      console.log("Adding to Favorites");
+      sourceImage = require("../Images/ic_favorite.png");
+    }
+    return <Image style={styles.favorite_image} source={sourceImage} />;
+  }
+
   _displayFilm() {
     if (this.state.film != undefined) {
       console.log("displayFilm");
@@ -48,6 +77,12 @@ class FilmDetail extends React.Component {
           <View style={styles.filmDesc_container}>
             {/* Titre du film */}
             <Text style={styles.title}>{this.state.film.title}</Text>
+            <TouchableOpacity
+              style={styles.favorite_container}
+              onPress={() => this._toggleFavorite()}
+            >
+              {this._displayFavoriteImage()}
+            </TouchableOpacity>
             {/* Description du film */}
             <Text style={styles.description}>{this.state.film.overview}</Text>
           </View>
@@ -99,8 +134,13 @@ class FilmDetail extends React.Component {
     );
   }
 
+  componentDidUpdate() {
+    console.log("componentDidUpdate:");
+    // console.log(this.props.favoritesFilm);
+  }
+
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <View style={styles.main_container}>
         {/* <Text>Détail du film {this.props.navigation.state.params.idFilm}</Text> */}
@@ -127,6 +167,13 @@ const styles = StyleSheet.create({
   },
   scrollview_container: {
     flex: 1,
+  },
+  favorite_container: {
+    alignItems: "center",
+  },
+  favorite_image: {
+    height: 40,
+    width: 40,
   },
 
   filmImage_container: {
@@ -162,7 +209,9 @@ const styles = StyleSheet.create({
 
 // Connecting and updating Redux Store
 const mapStateToProps = (state) => {
-  return state;
+  return {
+    favoritesFilm: state.favoritesFilm,
+  };
 };
 
 export default connect(mapStateToProps)(FilmDetail);
