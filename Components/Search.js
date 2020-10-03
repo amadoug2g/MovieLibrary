@@ -4,16 +4,17 @@ import {
   TextInput,
   Button,
   StyleSheet,
-  FlatList,
   ActivityIndicator,
   Keyboard,
 } from "react-native";
 
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
-import FilmItem from "./FilmItem";
+import FilmList from "./FilmList";
 import { connect } from "react-redux";
 
+// Search Screen Component
 class Search extends React.Component {
+  // Initializing variables
   constructor(props) {
     super();
     this.searchedText = "";
@@ -23,9 +24,12 @@ class Search extends React.Component {
       films: [],
       isLoading: false,
     };
+
+    // this._loadFilms() = this._loadFilms.bind(this);
   }
 
-  _loadFilms() {
+  // Load list of films
+  _loadFilms = () => {
     if (this.searchedText.length > 0) {
       this.setState({ isLoading: true });
       getFilmsFromApiWithSearchedText(this.searchedText, this.page + 1).then(
@@ -40,12 +44,14 @@ class Search extends React.Component {
         }
       );
     }
-  }
+  };
 
+  // Retrieve input text
   _searchTextInputChanged(text) {
     this.searchedText = text;
   }
 
+  // Display loading animation
   _displayLoading() {
     if (this.state.isLoading) {
       return (
@@ -56,6 +62,7 @@ class Search extends React.Component {
     }
   }
 
+  // Start new search
   _searchFilms() {
     Keyboard.dismiss();
     this.page = 0;
@@ -78,27 +85,9 @@ class Search extends React.Component {
     );
   }
 
-  _favoriteTitle = (text) => {
-    const result = text;
-    if (
-      this.props.favoritesFilm.findIndex(
-        (item) => item.id === this.state.film.id
-      ) !== -1
-    ) {
-      return false;
-    } else {
-      return result;
-    }
-  };
-
-  // Displaying Film details
-  _displayDetailForFilm = (idFilm) => {
-    this.props.navigation.navigate("FilmDetail", { idFilm: idFilm });
-  };
-
+  // Display Elements
   render() {
     console.log("RENDER");
-    // console.log(this.props);
     return (
       <View style={styles.main_container}>
         <TextInput
@@ -108,29 +97,12 @@ class Search extends React.Component {
           onSubmitEditing={() => this._searchFilms()}
         />
         <Button title="Rechercher" onPress={() => this._searchFilms()} />
-        <FlatList
-          data={this.state.films}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <FilmItem
-              film={item}
-              isFilmFavorite={
-                this.props.favoritesFilm.findIndex(
-                  (film) => film.id === item.id
-                ) !== -1
-                  ? true
-                  : false
-              }
-              displayDetailForFilm={this._displayDetailForFilm}
-              extraData={this.props.favoritesFilm}
-            />
-          )}
-          onEndReachedThreshold={0.5}
-          onEndReached={() => {
-            if (this.page < this.totalPages) {
-              this._loadFilms();
-            }
-          }}
+        <FilmList
+          dataList={this.state.films}
+          navigation={this.props.navigation}
+          loadFilms={this._loadFilms}
+          page={this.page}
+          totalPage={this.totalPages}
         />
         {this._displayLoading()}
       </View>
@@ -138,6 +110,7 @@ class Search extends React.Component {
   }
 }
 
+// Element Styles
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
@@ -164,8 +137,10 @@ const styles = StyleSheet.create({
   },
 });
 
+// Connect Component to Redux store
 const mapStateToProps = (state) => {
   return {
+    // Retrieve favorite list from store (global state)
     favoritesFilm: state.favoritesFilm,
   };
 };

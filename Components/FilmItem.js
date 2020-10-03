@@ -3,14 +3,15 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { getImageFromApi } from "../API/TMDBApi";
 
 class FilmItem extends React.Component {
+  // Display Favorite Image in title
   _displayFavoriteImage(bool) {
-    // Default image is hollow
     var sourceImage = require("../Images/ic_favorite.png");
     if (bool) {
       return <Image style={styles.favorite_image} source={sourceImage} />;
     }
   }
 
+  // Display Elements
   render() {
     const { film, displayDetailForFilm } = this.props;
     return (
@@ -51,6 +52,7 @@ class FilmItem extends React.Component {
   }
 }
 
+// Display Elements
 const styles = StyleSheet.create({
   main_container: {
     height: 190,
