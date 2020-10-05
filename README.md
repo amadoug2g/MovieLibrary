@@ -1,5 +1,6 @@
 # Movie Library
 Mobile application using React Native &amp; Redux
+![Application Screenshots](https://github.com/amadoug2g/Playground/blob/master/Images/Screenchots.png?raw=true)
 
 ## Introduction
 A mobile application used to browse through movies built with React Native, Redux and the TMDB API.
