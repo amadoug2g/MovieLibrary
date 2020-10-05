@@ -24,7 +24,6 @@ npm install
 ```
 ### 3. Get your API key
 You can get your TBDM API key by creating an account on their [website](https://www.themoviedb.org/).
-Don't forget to add a `.env` file with the API key, at the root of your project.
 ### 4. Start your app
 ```
 npm start
