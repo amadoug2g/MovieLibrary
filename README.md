@@ -18,7 +18,7 @@ Following the React Native [Guide](https://reactnative.dev/docs/environment-setu
 * [Expo](https://expo.io/)
 ### 2. Install dependencies
 ```
-git clone https://github.com/amadoug2g/Playground
+git clone https://github.com/amadoug2g/MovieLibrary
 cd Playground
 npm install
 ```
