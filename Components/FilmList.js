@@ -13,7 +13,7 @@ class FilmList extends React.Component {
     };
   }
 
-  // Displaying Film details
+  // Displaying Film details by passing the movie ID
   _displayDetailForFilm = (idFilm) => {
     this.props.navigation.navigate("FilmDetail", { idFilm: idFilm });
   };

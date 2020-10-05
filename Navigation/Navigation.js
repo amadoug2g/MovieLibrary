@@ -5,9 +5,10 @@ import { createStackNavigator } from "react-navigation-stack";
 import Search from "../Components/Search";
 import Favorites from "../Components/Favorites";
 import FilmDetail from "../Components/FilmDetails";
+import Test from "../Components/Test";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
-// Search page and every screens connected
+// Search page and every screens related
 const SearchStackNavigator = createStackNavigator({
   Search: {
     screen: Search,
@@ -39,9 +40,26 @@ const FavStackNavigator = createStackNavigator({
   },
 });
 
+// Test page
+const TestStackNavigator = createStackNavigator({
+  Test: {
+    screen: Test,
+    navigationOptions: {
+      title: "Testing",
+    },
+  },
+});
+
 const MoviesTabNavigator = createBottomTabNavigator(
   // Tabs to display
   {
+    // Test: {
+    //   screen: TestStackNavigator,
+    //   navigationOptions: {
+    //     tabBarIcon: () => {},
+    //   },
+    //   title: "Test",
+    // },
     Search: {
       screen: SearchStackNavigator,
       navigationOptions: {
@@ -74,7 +92,7 @@ const MoviesTabNavigator = createBottomTabNavigator(
     tabBarOptions: {
       activeBackgroundColor: "#EEE",
       inactiveBackgroundColor: "#FFF",
-      showLabel: false,
+      // showLabel: false,
       showIcon: true,
       keyboardHidesTabBar: true,
     },

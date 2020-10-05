@@ -6,9 +6,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   Keyboard,
+  Text,
 } from "react-native";
 
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
+import { ProgressBar, Colors } from "react-native-paper";
 import FilmList from "./FilmList";
 import { connect } from "react-redux";
 
@@ -23,6 +25,7 @@ class Search extends React.Component {
     this.state = {
       films: [],
       isLoading: false,
+      counter: 1,
     };
 
     // this._loadFilms() = this._loadFilms.bind(this);
@@ -46,6 +49,10 @@ class Search extends React.Component {
     }
   };
 
+  _message = (text) => {
+    return <Text>Environ {text} résultat(s)</Text>;
+  };
+
   // Retrieve input text
   _searchTextInputChanged(text) {
     this.searchedText = text;
@@ -56,7 +63,14 @@ class Search extends React.Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.loading_container}>
-          <ActivityIndicator animating={true} size="large" />
+          {/* <ActivityIndicator animating={true} size="large" /> */}
+          <ProgressBar
+            progress={0.8}
+            color={Colors.red800}
+            indeterminate={true}
+            visible={true}
+          />
+          <Text>Chargement des films....</Text>
         </View>
       );
     }
